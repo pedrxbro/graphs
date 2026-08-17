@@ -38,3 +38,28 @@ bool AdjacencyMatrixGraph::removeVertex(int index)
 
     return true;
 }
+
+bool AdjacencyMatrixGraph::addEdge(int source, int destination, float weight) 
+{   
+	// Verifica se os índices dos vértices são válidos.
+    if (source < 0 ||
+        destination < 0 ||
+        source >= static_cast<int>(adjacencyMatrix_.size()) ||
+        destination >= static_cast<int>(adjacencyMatrix_.size()))
+    {
+        return false;
+    }
+
+    const float edgeWeight = weighted_ ? weight : 1.0f;
+
+	// Adiciona a aresta na matriz de adjacência.
+	adjacencyMatrix_[source][destination] = edgeWeight;
+
+    // Adicionando a ligação de volta
+	if (!directed_)
+	{
+		adjacencyMatrix_[destination][source] = edgeWeight;
+	}
+
+    return true;
+}

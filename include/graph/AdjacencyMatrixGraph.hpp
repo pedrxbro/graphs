@@ -15,6 +15,12 @@ public:
 
 	bool addVertex() override;
 	bool removeVertex(int index) override;
+	
+	bool addEdge(
+		int source, 
+		int destination,	
+		float weight = 1.0f
+	) override;
 
 private:
 	std::vector<std::vector<float>> adjacencyMatrix_;
