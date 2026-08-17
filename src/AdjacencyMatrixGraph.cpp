@@ -103,3 +103,16 @@ bool AdjacencyMatrixGraph::hasEdge(int source, int destination) const
 
 	return adjacencyMatrix_[source][destination] != 0.0f;
 }
+
+float AdjacencyMatrixGraph::getEdgeWeight(int source, int destination) const
+{
+    if (source < 0 ||
+        destination < 0 ||
+        source >= static_cast<int>(adjacencyMatrix_.size()) ||
+        destination >= static_cast<int>(adjacencyMatrix_.size()))
+    {
+		return 0.0f; // Retorna 0 se os índices forem inválidos
+    }
+
+    return adjacencyMatrix_[source][destination];
+}

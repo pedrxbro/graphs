@@ -33,6 +33,11 @@ public:
 		int destination
 	) const override;
 
+	float getEdgeWeight(
+		int source,
+		int destination
+	) const override;
+
 private:
 	std::vector<std::vector<float>> adjacencyMatrix_;
 };
