@@ -14,6 +14,7 @@ public:
 	}
 
 	bool addVertex() override;
+	bool removeVertex(int index) override;
 
 private:
 	std::vector<std::vector<float>> adjacencyMatrix_;
