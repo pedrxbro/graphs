@@ -38,3 +38,81 @@ bool AdjacencyMatrixGraph::removeVertex(int index)
 
     return true;
 }
+
+bool AdjacencyMatrixGraph::addEdge(int source, int destination, float weight) 
+{   
+	// Verifica se os índices dos vértices são válidos.
+    if (source < 0 ||
+        destination < 0 ||
+        source >= static_cast<int>(adjacencyMatrix_.size()) ||
+        destination >= static_cast<int>(adjacencyMatrix_.size()))
+    {
+        return false;
+    }
+
+    const float edgeWeight = weighted_ ? weight : 1.0f;
+
+	// Adiciona a aresta na matriz de adjacência.
+	adjacencyMatrix_[source][destination] = edgeWeight;
+
+    // Adicionando a ligação de volta
+	if (!directed_)
+	{
+		adjacencyMatrix_[destination][source] = edgeWeight;
+	}
+
+    return true;
+}
+
+bool AdjacencyMatrixGraph::removeEdge(int source, int destination)
+{
+	// Verifica se são válidos os índices dos vértices.
+    if (source < 0 ||
+		destination < 0 ||
+		source >= static_cast<int>(adjacencyMatrix_.size()) ||
+        destination >=  static_cast<int>(adjacencyMatrix_.size()))
+    { 
+        return false;
+    }
+
+	if (adjacencyMatrix_[source][destination] == 0.0f)
+	{
+		return false; // A aresta não existe
+	}
+
+    // Remove a aresta da matriz de adjacência.
+    adjacencyMatrix_[source][destination] = 0.0f;
+
+
+    if (!directed_) {
+		adjacencyMatrix_[destination][source] = 0.0f; // Remove a ligação de volta
+    }
+
+    return true;
+}
+
+bool AdjacencyMatrixGraph::hasEdge(int source, int destination) const
+{
+    if (source < 0 ||
+        destination < 0 ||
+        source >= static_cast<int>(adjacencyMatrix_.size()) ||
+        destination >= static_cast<int>(adjacencyMatrix_.size()))
+    {
+        return false;
+    }
+
+	return adjacencyMatrix_[source][destination] != 0.0f;
+}
+
+float AdjacencyMatrixGraph::getEdgeWeight(int source, int destination) const
+{
+    if (source < 0 ||
+        destination < 0 ||
+        source >= static_cast<int>(adjacencyMatrix_.size()) ||
+        destination >= static_cast<int>(adjacencyMatrix_.size()))
+    {
+		return 0.0f; // Retorna 0 se os índices forem inválidos
+    }
+
+    return adjacencyMatrix_[source][destination];
+}
