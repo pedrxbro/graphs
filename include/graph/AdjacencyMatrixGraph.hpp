@@ -13,6 +13,8 @@ public:
 	{
 	}
 
+	bool addVertex() override;
+
 private:
 	std::vector<std::vector<float>> adjacencyMatrix_;
 };
