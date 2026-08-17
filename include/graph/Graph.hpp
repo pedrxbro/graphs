@@ -25,7 +25,7 @@ public:
     virtual bool addEdge(
         int source,
         int destination,
-        float wheight = 1.0f
+        float weight = 1.0f
     ) = 0;
 
     virtual bool removeEdge(
@@ -38,7 +38,7 @@ public:
         int destination
     ) const = 0;
 
-    virtual bool getEdgeWeight(
+    virtual float getEdgeWeight(
         int source,
         int destination
     ) const = 0;
