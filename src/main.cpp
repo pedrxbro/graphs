@@ -2,6 +2,7 @@
 #include <type_traits>
 
 #include "graph/Graph.hpp"
+#include "graph/AdjacencyMatrixGraph.hpp"
 
 int main()
 {
@@ -10,7 +11,12 @@ int main()
         "Graph precisa ser uma classe abstrata."
         );
 
-    std::cout << "Projeto inicial de Grafos." << std::endl;
+    static_assert(
+        std::is_base_of_v<Graph, AdjacencyMatrixGraph>,
+        "AdjacencyMatrixGraph precisa herdar de Graph"
+        );
+
+    std::cout << "Projeto compilado com sucesso." << std::endl;
 
     return 0;
 }
