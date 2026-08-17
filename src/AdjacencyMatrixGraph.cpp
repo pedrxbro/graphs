@@ -63,3 +63,30 @@ bool AdjacencyMatrixGraph::addEdge(int source, int destination, float weight)
 
     return true;
 }
+
+bool AdjacencyMatrixGraph::removeEdge(int source, int destination)
+{
+	// Verifica se são válidos os índices dos vértices.
+    if (source < 0 ||
+		destination < 0 ||
+		source >= static_cast<int>(adjacencyMatrix_.size()) ||
+        destination >=  static_cast<int>(adjacencyMatrix_.size()))
+    { 
+        return false;
+    }
+
+	if (adjacencyMatrix_[source][destination] == 0.0f)
+	{
+		return false; // A aresta não existe
+	}
+
+    // Remove a aresta da matriz de adjacência.
+    adjacencyMatrix_[source][destination] = 0.0f;
+
+
+    if (!directed_) {
+		adjacencyMatrix_[destination][source] = 0.0f; // Remove a ligação de volta
+    }
+
+    return true;
+}

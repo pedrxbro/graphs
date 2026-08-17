@@ -22,6 +22,11 @@ public:
 		float weight = 1.0f
 	) override;
 
+	bool removeEdge(
+		int source,
+		int destination
+	) override;
+
 private:
 	std::vector<std::vector<float>> adjacencyMatrix_;
 };
