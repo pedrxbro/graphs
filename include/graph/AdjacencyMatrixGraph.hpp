@@ -27,6 +27,12 @@ public:
 		int destination
 	) override;
 
+
+	bool hasEdge(
+		int source,
+		int destination
+	) const override;
+
 private:
 	std::vector<std::vector<float>> adjacencyMatrix_;
 };

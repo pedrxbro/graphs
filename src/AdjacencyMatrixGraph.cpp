@@ -90,3 +90,16 @@ bool AdjacencyMatrixGraph::removeEdge(int source, int destination)
 
     return true;
 }
+
+bool AdjacencyMatrixGraph::hasEdge(int source, int destination) const
+{
+    if (source < 0 ||
+        destination < 0 ||
+        source >= static_cast<int>(adjacencyMatrix_.size()) ||
+        destination >= static_cast<int>(adjacencyMatrix_.size()))
+    {
+        return false;
+    }
+
+	return adjacencyMatrix_[source][destination] != 0.0f;
+}
