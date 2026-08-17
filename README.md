@@ -49,17 +49,17 @@ O segundo comando realiza a compilação.
 Dependendo do gerador utilizado pelo CMake, o executável poderá estar em:
 
 ```bash
-.\build\Debug\graph_project.exe
+.\build\Debug\graphs.exe
 ```
 
 ou:
 
 ```bash
-.\build\graph_project.exe
+.\build\graphs.exe
 ```
 
 ### Linux / macOS
 
 ```bash
-./build/graph_project
+./build/graphs
 ```
