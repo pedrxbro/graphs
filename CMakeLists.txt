@@ -9,6 +9,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_executable(graphs
     src/main.cpp
     src/AdjacencyMatrixGraph.cpp
+    src/AdjacencyListGraph.cpp
 )
 
 target_include_directories(graphs PRIVATE
