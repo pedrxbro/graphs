@@ -15,7 +15,8 @@ public:
 
 	bool addVertex() override;
 	bool removeVertex(int index) override;
-	
+	void printGraph() const override;
+
 	bool addEdge(
 		int source, 
 		int destination,	

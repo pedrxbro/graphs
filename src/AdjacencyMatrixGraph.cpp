@@ -1,5 +1,7 @@
 #include "graph/AdjacencyMatrixGraph.hpp"
 
+#include <iostream>
+
 bool AdjacencyMatrixGraph::addVertex()
 {
     // Calcula o novo tamanho da matriz.
@@ -37,6 +39,41 @@ bool AdjacencyMatrixGraph::removeVertex(int index)
     }
 
     return true;
+}
+
+void AdjacencyMatrixGraph::printGraph() const
+{
+    if (adjacencyMatrix_.empty())
+    {
+        std::cout << "Grafo vazio." << std::endl;
+        return;
+    }
+
+    // Printa os  índices da coluna
+    std::cout << "\t";
+    for (std::size_t column = 0;
+        column < adjacencyMatrix_.size();
+        column++)
+    {
+        std::cout << column << "\t";
+    }
+
+    std::cout << std::endl;
+
+    for (std::size_t row = 0;
+        row < adjacencyMatrix_.size();
+        row++)
+
+    {
+        std::cout << row << "\t";
+
+        for (float value : adjacencyMatrix_[row])
+        {
+            std::cout << value << "\t";
+        }
+
+        std::cout << std::endl;
+    }
 }
 
 bool AdjacencyMatrixGraph::addEdge(int source, int destination, float weight) 
