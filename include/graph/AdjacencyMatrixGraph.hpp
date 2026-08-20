@@ -38,6 +38,10 @@ public:
 		int destination
 	) const override;
 
+	std::vector<int> getNeighbors(
+		int vertex
+	) const override;
+
 private:
 	std::vector<std::vector<float>> adjacencyMatrix_;
 };

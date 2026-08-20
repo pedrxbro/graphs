@@ -111,8 +111,36 @@ float AdjacencyMatrixGraph::getEdgeWeight(int source, int destination) const
         source >= static_cast<int>(adjacencyMatrix_.size()) ||
         destination >= static_cast<int>(adjacencyMatrix_.size()))
     {
-		return 0.0f; // Retorna 0 se os índices forem inválidos
+		return 0.0f; // Índices forem inválidos
     }
 
     return adjacencyMatrix_[source][destination];
+}
+
+std::vector<int> AdjacencyMatrixGraph::getNeighbors(int vertex) const
+{
+    std::vector<int> neighbors;
+
+    // Verifica se o vértice é válido
+    if (vertex < 0 ||
+        vertex >= static_cast<int>(adjacencyMatrix_.size()))
+    {
+        return neighbors; // Vai retornar vazio
+    }
+
+    // Percorre as colunas da linha do vértice
+    for (std::size_t destination = 0;
+        destination < adjacencyMatrix_[vertex].size();
+        ++destination)
+
+    {
+        // Verifica se existe aresta nessa posição
+        if (adjacencyMatrix_[vertex][destination] != 0.0f)
+        {
+            neighbors.push_back(
+                static_cast<int>(destination)
+            );
+        }
+    }
+    return neighbors;
 }
