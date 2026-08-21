@@ -15,7 +15,8 @@ public:
 
 	bool addVertex() override;
 	bool removeVertex(int index) override;
-	
+	void printGraph() const override;
+
 	bool addEdge(
 		int source, 
 		int destination,	
@@ -36,6 +37,10 @@ public:
 	float getEdgeWeight(
 		int source,
 		int destination
+	) const override;
+
+	std::vector<int> getNeighbors(
+		int vertex
 	) const override;
 
 private:

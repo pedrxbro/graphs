@@ -6,17 +6,32 @@
 
 int main()
 {
-    static_assert(
-        std::is_abstract_v<Graph>,
-        "Graph precisa ser uma classe abstrata."
-        );
+        
+    // Não direcionado e não ponderado
+    AdjacencyMatrixGraph adjacencyMatrixGraph(false, false);
 
-    static_assert(
-        std::is_base_of_v<Graph, AdjacencyMatrixGraph>,
-        "AdjacencyMatrixGraph precisa herdar de Graph"
-        );
+    adjacencyMatrixGraph.addVertex();
+    adjacencyMatrixGraph.addVertex();
+    adjacencyMatrixGraph.addVertex();
+    adjacencyMatrixGraph.addVertex();
 
-    std::cout << "Projeto compilado com sucesso." << std::endl;
+    adjacencyMatrixGraph.addEdge(0, 1);
+    adjacencyMatrixGraph.addEdge(0, 2);
+    adjacencyMatrixGraph.addEdge(0, 3);
+    adjacencyMatrixGraph.addEdge(1, 3);
+
+    std::cout << "Matriz de adjacencia: " << std::endl;
+    adjacencyMatrixGraph.printGraph();
+
+    std::cout << std::endl;
+
+    std::cout << "Vizinhos do vertice 1: ";
+    for (int neighbor : adjacencyMatrixGraph.getNeighbors(1)) 
+    {
+        std::cout << neighbor << " ";
+    }
+
+    std::cout << std::endl;
 
     return 0;
 }
