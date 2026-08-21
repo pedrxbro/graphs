@@ -87,6 +87,12 @@ bool AdjacencyMatrixGraph::addEdge(int source, int destination, float weight)
         return false;
     }
 
+    // Peso não pode ser 0
+    if (weighted_ && weight == 0.0f)
+    {
+        return false;
+    }
+
     const float edgeWeight = weighted_ ? weight : 1.0f;
 
 	// Adiciona a aresta na matriz de adjacência.
