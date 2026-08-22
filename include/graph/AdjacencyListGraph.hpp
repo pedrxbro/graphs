@@ -50,9 +50,9 @@ private:
     };
 
     struct Vertex
-    {   
+    {
         std::vector<Edge> connections;
-    }
+    };
 
     std::vector<Vertex> vertexList_;
-} 
+};
