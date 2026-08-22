@@ -48,3 +48,63 @@ bool AdjacencyListGraph::removeVertex(int index)
 
 	return true;
 }
+
+bool AdjacencyListGraph::addEdge(int source, int destination, float weight)
+{
+	// Verifica se os índices são válidos
+	if(source < 0 ||
+		destination < 0 ||
+		source >= static_cast<int>(vertexList_.size()) ||
+		destination <= static_cast<int>(vertexList_.size()))
+	{ 
+		return false;
+	}
+
+	// Peso não pode ser 0
+	if (weighted_ && weight == 0.0f)
+	{
+		return false;
+	}
+	const float edgeWeight = weighted_ ? weight : 1.0f;
+
+	std::vector<Edge>& sourceConnections = vertexList_[source].connections;
+
+	// Verifica se a aresta já existe
+	for (Edge& edge : sourceConnections)
+	{
+		if (edge.destination == destination)
+		{
+			// Se existe atualiza somente o peso
+			edge.weight = edgeWeight;
+
+			// Atualiza a ligação de volta
+			if (!directed_ && source != destination)
+			{
+				std::vector<Edge>& destinationConnections =
+					vertexList_[destination].connections;
+
+				// Procura as arestas que saem do destino e atualiza o peso
+				for (Edge& reverseEdge : destinationConnections)
+				{
+					if (reverseEdge.destination == source)
+					{
+						reverseEdge.weight = edgeWeight;
+						break;
+					}
+				}
+			}
+			return true;
+		}
+	}
+
+	// Adiciona a aresta
+	sourceConnections.push_back({destination,edgeWeight});
+
+	// Adiciona a volta para não direcionados
+	if (!directed_ && source != destination)
+	{
+		vertexList_[destination].connections.push_back({source, edgeWeight});
+	}
+
+	return true;
+}
