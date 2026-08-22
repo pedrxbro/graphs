@@ -7,13 +7,15 @@
 class AdjacencyListGraph : public Graph
 {
 public:
-    AdjacencyListGraph(bool directed, bool weight)
-        : Graph(directed, weight)
+    AdjacencyListGraph(bool directed, bool weighted)
+        : Graph(directed, weighted)
     {
     }
 
     bool addVertex() override;
-    bool removeVertex() override;
+    bool removeVertex(int index) override;
+
+    void printGraph() const override;
 
     bool addEdge(
         int source,
@@ -36,12 +38,21 @@ public:
         int destination
     ) const override;
 
+    std::vector<int> getNeighbors(
+        int vertex
+    ) const override;
+
 private:
+    struct Edge
+    {
+        int destination;
+        float weight;
+    };
+
     struct Vertex
     {   
-        int index
-        std::vector<int> conections;
+        std::vector<Edge> connections;
     }
 
-    std::vector<Vertex> vertexList_
+    std::vector<Vertex> vertexList_;
 } 
