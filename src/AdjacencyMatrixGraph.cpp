@@ -1,5 +1,7 @@
 #include "graph/AdjacencyMatrixGraph.hpp"
 
+#include <iostream>
+
 bool AdjacencyMatrixGraph::addVertex()
 {
     // Calcula o novo tamanho da matriz.
@@ -39,6 +41,41 @@ bool AdjacencyMatrixGraph::removeVertex(int index)
     return true;
 }
 
+void AdjacencyMatrixGraph::printGraph() const
+{
+    if (adjacencyMatrix_.empty())
+    {
+        std::cout << "Grafo vazio." << std::endl;
+        return;
+    }
+
+    // Printa os  índices da coluna
+    std::cout << "\t";
+    for (std::size_t column = 0;
+        column < adjacencyMatrix_.size();
+        column++)
+    {
+        std::cout << column << "\t";
+    }
+
+    std::cout << std::endl;
+
+    for (std::size_t row = 0;
+        row < adjacencyMatrix_.size();
+        row++)
+
+    {
+        std::cout << row << "\t";
+
+        for (float value : adjacencyMatrix_[row])
+        {
+            std::cout << value << "\t";
+        }
+
+        std::cout << std::endl;
+    }
+}
+
 bool AdjacencyMatrixGraph::addEdge(int source, int destination, float weight) 
 {   
 	// Verifica se os índices dos vértices são válidos.
@@ -46,6 +83,12 @@ bool AdjacencyMatrixGraph::addEdge(int source, int destination, float weight)
         destination < 0 ||
         source >= static_cast<int>(adjacencyMatrix_.size()) ||
         destination >= static_cast<int>(adjacencyMatrix_.size()))
+    {
+        return false;
+    }
+
+    // Peso não pode ser 0
+    if (weighted_ && weight == 0.0f)
     {
         return false;
     }
@@ -111,8 +154,36 @@ float AdjacencyMatrixGraph::getEdgeWeight(int source, int destination) const
         source >= static_cast<int>(adjacencyMatrix_.size()) ||
         destination >= static_cast<int>(adjacencyMatrix_.size()))
     {
-		return 0.0f; // Retorna 0 se os índices forem inválidos
+		return 0.0f; // Índices forem inválidos
     }
 
     return adjacencyMatrix_[source][destination];
+}
+
+std::vector<int> AdjacencyMatrixGraph::getNeighbors(int vertex) const
+{
+    std::vector<int> neighbors;
+
+    // Verifica se o vértice é válido
+    if (vertex < 0 ||
+        vertex >= static_cast<int>(adjacencyMatrix_.size()))
+    {
+        return neighbors; // Vai retornar vazio
+    }
+
+    // Percorre as colunas da linha do vértice
+    for (std::size_t destination = 0;
+        destination < adjacencyMatrix_[vertex].size();
+        ++destination)
+
+    {
+        // Verifica se existe aresta nessa posição
+        if (adjacencyMatrix_[vertex][destination] != 0.0f)
+        {
+            neighbors.push_back(
+                static_cast<int>(destination)
+            );
+        }
+    }
+    return neighbors;
 }
