@@ -52,10 +52,10 @@ bool AdjacencyListGraph::removeVertex(int index)
 bool AdjacencyListGraph::addEdge(int source, int destination, float weight)
 {
 	// Verifica se os índices são válidos
-	if(source < 0 ||
+	if( source < 0 ||
 		destination < 0 ||
 		source >= static_cast<int>(vertexList_.size()) ||
-		destination <= static_cast<int>(vertexList_.size()))
+		destination >= static_cast<int>(vertexList_.size()))
 	{ 
 		return false;
 	}
@@ -106,5 +106,58 @@ bool AdjacencyListGraph::addEdge(int source, int destination, float weight)
 		vertexList_[destination].connections.push_back({source, edgeWeight});
 	}
 
+	return true;
+}
+
+bool AdjacencyListGraph::removeEdge(int source, int destination)
+{
+	// Verifica se são válidos
+	if (source < 0 ||
+		destination < 0 ||
+		source >= static_cast<int>(vertexList_.size()) ||
+		destination >= static_cast<int>(vertexList_.size()))
+	{
+		return false;
+	}
+
+	std::vector<Edge>& sourceConnections =
+		vertexList_[source].connections;
+
+	bool removed = false;
+
+	// Procura e remove aresta de origem para destino
+	for (std::vector<Edge>::iterator it = sourceConnections.begin();
+		it != sourceConnections.end();
+		++it
+		)
+	{
+		if (it->destination == destination)
+		{
+			sourceConnections.erase(it);
+			removed = true;
+			break;
+		}
+	}
+	if (!removed) {
+		removed = false;
+	}
+
+	// Remove a volta
+	if (!directed_ && source != destination) 
+	{
+		std::vector<Edge>& destinationConnections =
+			vertexList_[destination].connections;
+
+		for (std::vector<Edge>::iterator it = destinationConnections.begin();
+			it != destinationConnections.end();
+			++it
+			)
+		{
+			if (it->destination == source) {
+				destinationConnections.erase(it);
+				break;
+			}
+		}
+	}
 	return true;
 }
