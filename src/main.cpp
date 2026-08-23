@@ -3,10 +3,11 @@
 
 #include "graph/Graph.hpp"
 #include "graph/AdjacencyMatrixGraph.hpp"
+#include "graph/AdjacencyListGraph.hpp"
 
 int main()
 {
-        
+
     // Não direcionado e não ponderado
     AdjacencyMatrixGraph adjacencyMatrixGraph(false, false);
 
@@ -26,7 +27,35 @@ int main()
     std::cout << std::endl;
 
     std::cout << "Vizinhos do vertice 1: ";
-    for (int neighbor : adjacencyMatrixGraph.getNeighbors(1)) 
+    for (int neighbor : adjacencyMatrixGraph.getNeighbors(1))
+    {
+        std::cout << neighbor << " ";
+    }
+
+    std::cout << std::endl;
+    std::cout << std::endl;
+
+
+    // Não direcionado e não ponderado
+    AdjacencyListGraph adjacencyListGraph(false, false);
+
+    adjacencyListGraph.addVertex();
+    adjacencyListGraph.addVertex();
+    adjacencyListGraph.addVertex();
+    adjacencyListGraph.addVertex();
+
+    adjacencyListGraph.addEdge(0, 1);
+    adjacencyListGraph.addEdge(0, 2);
+    adjacencyListGraph.addEdge(0, 3);
+    adjacencyListGraph.addEdge(1, 3);
+
+    std::cout << "Lista de adjacencia: " << std::endl;
+    adjacencyListGraph.printGraph();
+
+    std::cout << std::endl;
+
+    std::cout << "Vizinhos do vertice 1: ";
+    for (int neighbor : adjacencyListGraph.getNeighbors(1))
     {
         std::cout << neighbor << " ";
     }
