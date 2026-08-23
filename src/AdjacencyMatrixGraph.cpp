@@ -76,6 +76,11 @@ void AdjacencyMatrixGraph::printGraph() const
     }
 }
 
+int AdjacencyMatrixGraph::getVertexCount() const
+{
+    return static_cast<int>(adjacencyMatrix_.size());
+}
+
 bool AdjacencyMatrixGraph::addEdge(int source, int destination, float weight) 
 {   
 	// Verifica se os índices dos vértices são válidos.
