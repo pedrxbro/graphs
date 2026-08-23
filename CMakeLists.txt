@@ -11,6 +11,7 @@ add_executable(graphs
     src/AdjacencyMatrixGraph.cpp
     src/AdjacencyListGraph.cpp
     src/GraphFileLoader.cpp
+    src/BreadthFirstSearch.cpp
 )
 
 target_include_directories(graphs PRIVATE
