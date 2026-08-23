@@ -19,6 +19,8 @@ public:
     virtual bool addVertex() = 0;
 
     virtual bool removeVertex(int index) = 0;
+    
+    virtual int getVertexCount() const = 0;
 
     virtual void printGraph() const = 0;
 

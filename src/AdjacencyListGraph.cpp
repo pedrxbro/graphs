@@ -51,6 +51,11 @@ bool AdjacencyListGraph::removeVertex(int index)
 	return true;
 }
 
+int AdjacencyListGraph::getVertexCount() const
+{
+	return static_cast<int>(vertexList_.size());
+}
+
 bool AdjacencyListGraph::addEdge(int source, int destination, float weight)
 {
 	// Verifica se os índices são válidos
