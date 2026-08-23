@@ -161,3 +161,27 @@ bool AdjacencyListGraph::removeEdge(int source, int destination)
 	}
 	return true;
 }
+
+bool AdjacencyListGraph::hasEdge(int source, int destination) const
+{
+	if (source < 0 ||
+		destination < 0 ||
+		source >= static_cast<int>(vertexList_.size()) ||
+		destination >= static_cast<int>(vertexList_.size()))
+	{
+		return false;
+	}
+
+	const std::vector<Edge>& connections =
+		vertexList_[source].connections;
+
+	// Procura a aresta
+	for (const Edge& edge : connections) 
+	{
+		if (edge.destination == destination)
+		{
+			return true;
+		}
+	}
+	return false;
+}
