@@ -111,7 +111,6 @@ bool AdjacencyListGraph::addEdge(int source, int destination, float weight)
 
 bool AdjacencyListGraph::removeEdge(int source, int destination)
 {
-	// Verifica se são válidos
 	if (source < 0 ||
 		destination < 0 ||
 		source >= static_cast<int>(vertexList_.size()) ||
@@ -184,4 +183,29 @@ bool AdjacencyListGraph::hasEdge(int source, int destination) const
 		}
 	}
 	return false;
+}
+
+float AdjacencyListGraph::getEdgeWeight(int source, int destination) const
+{
+	if (source < 0 ||
+		destination < 0 || 
+		source >= static_cast<int>(vertexList_.size()) ||
+		destination >= static_cast<int>(vertexList_.size()))
+	{
+		return 0.0f;
+	}
+
+	const std::vector<Edge> connections =
+		vertexList_[source].connections;
+
+	// Procura a aresta
+	for (const Edge& edge : connections)
+	{
+		if (edge.destination == destination) 
+		{
+			return edge.weight;
+		}
+	}
+
+	return 0.0f;
 }
