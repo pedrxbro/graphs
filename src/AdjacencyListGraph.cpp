@@ -209,3 +209,25 @@ float AdjacencyListGraph::getEdgeWeight(int source, int destination) const
 
 	return 0.0f;
 }
+
+std::vector<int> AdjacencyListGraph::getNeighbors(int vertex) const
+{
+	std::vector<int> neighbors;
+
+	if (vertex < 0 || 
+		vertex >= static_cast<int>(vertexList_.size()))
+	{
+		return neighbors;
+	}
+
+	const std::vector<Edge>& connections =
+		vertexList_[vertex].connections;
+
+	// Procura os vizinhos e adiciona na lista
+	for (const Edge& edge : connections)
+	{
+		neighbors.push_back(edge.destination);
+	}
+
+	return neighbors;
+}
