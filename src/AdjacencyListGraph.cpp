@@ -1,5 +1,7 @@
 #include "graph/AdjacencyListGraph.hpp"
 
+#include <iostream>
+
 bool AdjacencyListGraph::addVertex()
 {
 	vertexList_.emplace_back();
@@ -230,4 +232,31 @@ std::vector<int> AdjacencyListGraph::getNeighbors(int vertex) const
 	}
 
 	return neighbors;
+}
+
+void AdjacencyListGraph::printGraph() const
+{
+	for (std::size_t vertex = 0;
+		vertex < vertexList_.size();
+		vertex++)
+	{
+		std::cout << vertex << ": ";
+
+		const std::vector<Edge>& connections =
+			vertexList_[vertex].connections;
+
+		for (const Edge& edge : connections)
+		{
+			std::cout << edge.destination;
+
+			if (weighted_) 
+			{
+				std::cout << "(" << edge.weight << ")";
+			}
+
+			std::cout << " ";
+		}
+
+		std::cout << std::endl;
+	}
 }
