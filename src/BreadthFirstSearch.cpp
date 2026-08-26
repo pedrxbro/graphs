@@ -25,7 +25,9 @@ std::vector<int> BreadthFirstSearch::execute(
 
 	while (!queue.empty())
 	{
+		// Pega o próximo da fila
 		int currentVertex = queue.front();
+
 		queue.pop();
 
 		visitOrder.push_back(currentVertex);
