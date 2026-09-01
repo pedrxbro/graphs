@@ -71,3 +71,55 @@ DijkstraResult Dijkstra::execute(const Graph& graph, int source)
 
     return result;
 }
+
+std::vector<int> Dijkstra::buildPath(
+    const DijkstraResult& result,
+    int source,
+    int destination
+)
+{
+    std::vector<int> path;
+
+    if (source < 0 ||
+        destination < 0 ||
+        source >= static_cast<int>(
+            result.distances.size()
+            ) ||
+        destination >= static_cast<int>(
+            result.distances.size()
+            ))
+    {
+        return path;
+    }
+
+    int currentVertex = destination;
+
+    while (currentVertex != -1)
+    {
+        path.push_back(currentVertex);
+
+        if (currentVertex == source)
+        {
+            break;
+        }
+
+        currentVertex =
+            result.previous[currentVertex];
+    }
+
+    // Nao chegou ate a origem:
+    // destino era inalcançavel
+    if (path.empty() ||
+        path.back() != source)
+    {
+        path.clear();
+        return path;
+    }
+
+    std::reverse(
+        path.begin(),
+        path.end()
+    );
+
+    return path;
+}

@@ -2,9 +2,11 @@
 #include <memory>
 #include <queue>
 #include <vector>
+#include <cmath>
 
 #include "io/GraphFileLoader.hpp"
 #include "algorithms/BreadthFirstSearch.hpp"
+#include "algorithms/Dijkstra.hpp"
 
 void printQueue(std::queue<int> queue)
 {
@@ -117,7 +119,127 @@ void showBfsStepByStep(const Graph& graph, int source)
     std::cout << std::endl;
 }
 
+void printDijkstraResult(
+    const DijkstraResult& result,
+    int source
+)
+{
+    for (int destination = 0;
+        destination < static_cast<int>(result.distances.size());
+        ++destination)
+    {
+        std::cout
+            << "Vertice "
+            << destination
+            << std::endl;
+
+        if (std::isinf(result.distances[destination]))
+        {
+            std::cout
+                << "Distancia: infinito"
+                << std::endl;
+
+            std::cout
+                << "Caminho: nao alcancavel"
+                << std::endl;
+        }
+        else
+        {
+            std::cout
+                << "Distancia: "
+                << result.distances[destination]
+                << std::endl;
+
+            std::vector<int> path =
+                Dijkstra::buildPath(
+                    result,
+                    source,
+                    destination
+                );
+
+            std::cout << "Caminho: ";
+
+            for (std::size_t i = 0;
+                i < path.size();
+                ++i)
+            {
+                std::cout << path[i];
+
+                if (i + 1 < path.size())
+                {
+                    std::cout << " -> ";
+                }
+            }
+
+            std::cout << std::endl;
+        }
+
+        std::cout << std::endl;
+    }
+}
+
 int main()
+{
+    try
+    {
+        const int source = 0;
+
+        std::unique_ptr<Graph> matrixGraph =
+            GraphFileLoader::loadFromFile(
+                "dijkstra.txt",
+                GraphFileLoader::Representation::AdjacencyMatrix
+            );
+
+        std::unique_ptr<Graph> listGraph =
+            GraphFileLoader::loadFromFile(
+                "dijkstra.txt",
+                GraphFileLoader::Representation::AdjacencyList
+            );
+
+        std::cout
+            << "===== DIJKSTRA - MATRIZ ====="
+            << std::endl
+            << std::endl;
+
+        DijkstraResult matrixResult =
+            Dijkstra::execute(
+                *matrixGraph,
+                source
+            );
+
+        printDijkstraResult(
+            matrixResult,
+            source
+        );
+
+        std::cout
+            << "===== DIJKSTRA - LISTA ====="
+            << std::endl
+            << std::endl;
+
+        DijkstraResult listResult =
+            Dijkstra::execute(
+                *listGraph,
+                source
+            );
+
+        printDijkstraResult(
+            listResult,
+            source
+        );
+    }
+    catch (const std::exception& exception)
+    {
+        std::cout
+            << "Erro: "
+            << exception.what()
+            << std::endl;
+    }
+
+    return 0;
+}
+
+/* int main()
 {
     try
     {
@@ -172,4 +294,4 @@ int main()
     }
 
     return 0;
-}
+} */
