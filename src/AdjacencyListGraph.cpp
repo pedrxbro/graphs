@@ -145,7 +145,7 @@ bool AdjacencyListGraph::removeEdge(int source, int destination)
 		}
 	}
 	if (!removed) {
-		removed = false;
+		return false;
 	}
 
 	// Remove a volta
