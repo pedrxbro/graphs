@@ -69,3 +69,5 @@ Testing/
 .cache/
 
 .vs/
+.idea/
+.vscode/
