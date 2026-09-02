@@ -12,6 +12,7 @@ add_executable(graphs
     src/AdjacencyListGraph.cpp
     src/GraphFileLoader.cpp
     src/BreadthFirstSearch.cpp
+    src/Dijkstra.cpp
     src/DepthFirstSearch.cpp
 )
 
