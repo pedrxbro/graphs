@@ -166,13 +166,13 @@ void runDijkstra()
 {
     std::unique_ptr<Graph> matrixGraph =
         GraphFileLoader::loadFromFile(
-            "dijkstra.txt",
+            "graph.txt",
             GraphFileLoader::Representation::AdjacencyMatrix
         );
 
     std::unique_ptr<Graph> listGraph =
         GraphFileLoader::loadFromFile(
-            "dijkstra.txt",
+            "graph.txt",
             GraphFileLoader::Representation::AdjacencyList
         );
 
