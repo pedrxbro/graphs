@@ -1,65 +1,65 @@
 # Projeto de Grafos
 
-Implementação desenvolvida para a disciplina de Grafos.
+Trabalho desenvolvido em **C++17** para a disciplina de Grafos.
 
-O projeto será desenvolvido em **C++** e terá como objetivo implementar estruturas e algoritmos relacionados à Grafos.
+O projeto implementa duas representacoes de grafo:
 
-Inicialmente, será definida uma classe base `Graph`, que posteriormente será especializada nas seguintes representações:
+- matriz de adjacencia;
+- lista de adjacencia.
 
-* Matriz de adjacência;
-* Lista de adjacência.
+As duas representacoes seguem a mesma interface `Graph`, permitindo que os algoritmos sejam executados com o mesmo codigo.
 
-## Requisitos
+## Funcionalidades
 
-Para compilar o projeto é necessário possuir:
+- insercao e remocao de vertices;
+- insercao e remocao de arestas;
+- verificacao de arestas;
+- consulta de peso;
+- consulta de vizinhos;
+- leitura de grafos por arquivo;
+- Busca em Largura (BFS);
+- Busca em Profundidade (DFS);
+- Dijkstra.
 
-* Compilador compatível com C++17;
-* CMake 3.16 ou superior.
-
-## Estrutura inicial
+## Formato dos arquivos
 
 ```text
-.
-├── CMakeLists.txt
-├── README.md
-├── include/
-│   └── graph/
-│       └── Graph.hpp
-└── src/
-    └── main.cpp
+V A D P
+Ao Ad Ap
+...
 ```
 
-## Compilação
+Onde:
 
-Na raiz do projeto, execute:
+- `V`: numero de vertices;
+- `A`: numero de arestas;
+- `D`: direcionado (0 ou 1);
+- `P`: ponderado (0 ou 1);
+- `Ao`: vertice de origem;
+- `Ad`: vertice de destino;
+- `Ap`: peso, apenas para grafos ponderados.
+
+O arquivo `graph.txt` e usado em todas as demonstracoes do menu, incluindo BFS, DFS e Dijkstra.
+
+## Compilacao
 
 ```bash
 cmake -S . -B build
 cmake --build build
 ```
 
-O primeiro comando configura o projeto e cria os arquivos necessários dentro da pasta `build`.
+## Execucao
 
-O segundo comando realiza a compilação.
-
-## Execução
-
-### Windows
-
-Dependendo do gerador utilizado pelo CMake, o executável poderá estar em:
+No Windows, conforme o gerador utilizado:
 
 ```bash
-.\build\Debug\graphs.exe
+build\graphs.exe
 ```
 
-ou:
+ou
 
 ```bash
-.\build\graphs.exe
+build\Debug\graphs.exe
 ```
 
-### Linux / macOS
-
-```bash
-./build/graphs
-```
+Ao executar, o programa apresenta um menu para demonstrar as duas representacoes e os algoritmos BFS, DFS e Dijkstra.
