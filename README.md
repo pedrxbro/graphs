@@ -39,7 +39,7 @@ Onde:
 - `Ad`: vertice de destino;
 - `Ap`: peso, apenas para grafos ponderados.
 
-Os arquivos `graph.txt` e `dijkstra.txt` sao usados no menu de demonstracao.
+O arquivo `graph.txt` e usado em todas as demonstracoes do menu, incluindo BFS, DFS e Dijkstra.
 
 ## Compilacao
 
