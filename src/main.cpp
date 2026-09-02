@@ -1,124 +1,39 @@
+#include <cmath>
 #include <iostream>
 #include <memory>
-#include <queue>
 #include <string>
 #include <vector>
-#include <cmath>
 
-#include "io/GraphFileLoader.hpp"
 #include "algorithms/BreadthFirstSearch.hpp"
-#include "algorithms/Dijkstra.hpp"
 #include "algorithms/DepthFirstSearch.hpp"
+#include "algorithms/Dijkstra.hpp"
+#include "io/GraphFileLoader.hpp"
 
-void printQueue(std::queue<int> queue)
+void printVisitOrder(
+    const std::string& title,
+    const std::vector<int>& visitOrder
+)
 {
-    std::cout << "[ ";
+    std::cout << "\n" << title << ": ";
 
-    while (!queue.empty())
+    if (visitOrder.empty())
     {
-        std::cout << queue.front() << " ";
-        queue.pop();
+        std::cout << "nenhum vertice visitado";
     }
-
-    std::cout << "]";
-}
-
-void showBfsStepByStep(const Graph& graph, int source)
-{
-    int vertexCount = graph.getVertexCount();
-
-    if (source < 0 || source >= vertexCount)
+    else
     {
-        std::cout << "Vertice de origem invalido." << std::endl;
-        return;
-    }
-
-    std::vector<bool> visited(vertexCount, false);
-    std::vector<int> visitOrder;
-    std::queue<int> queue;
-
-    visited[source] = true;
-    queue.push(source);
-
-    int step = 1;
-
-    while (!queue.empty())
-    {
-        std::cout << "\n==============================" << std::endl;
-        std::cout << "Passo " << step << std::endl;
-        std::cout << "==============================" << std::endl;
-
-        std::cout << "Fila antes: ";
-        printQueue(queue);
-        std::cout << std::endl;
-
-        int currentVertex = queue.front();
-        queue.pop();
-
-        std::cout << "Vertice atual: "
-            << currentVertex
-            << std::endl;
-
-        visitOrder.push_back(currentVertex);
-
-        std::vector<int> neighbors =
-            graph.getNeighbors(currentVertex);
-
-        std::cout << "Vizinhos: [ ";
-
-        for (int neighbor : neighbors)
+        for (std::size_t i = 0; i < visitOrder.size(); ++i)
         {
-            std::cout << neighbor << " ";
-        }
+            std::cout << visitOrder[i];
 
-        std::cout << "]" << std::endl;
-
-        for (int neighbor : neighbors)
-        {
-            if (!visited[neighbor])
+            if (i + 1 < visitOrder.size())
             {
-                visited[neighbor] = true;
-                queue.push(neighbor);
-
-                std::cout
-                    << "Adicionando "
-                    << neighbor
-                    << " na fila."
-                    << std::endl;
+                std::cout << " -> ";
             }
         }
-
-        std::cout << "Fila depois: ";
-        printQueue(queue);
-        std::cout << std::endl;
-
-        std::cout << "Visitados: [ ";
-
-        for (int vertex : visitOrder)
-        {
-            std::cout << vertex << " ";
-        }
-
-        std::cout << "]" << std::endl;
-
-        std::cout
-            << "\nPressione ENTER para continuar...";
-
-        std::cin.get();
-
-        step++;
     }
 
-    std::cout << "\nBFS concluida." << std::endl;
-
-    std::cout << "Ordem final: ";
-
-    for (int vertex : visitOrder)
-    {
-        std::cout << vertex << " ";
-    }
-
-    std::cout << std::endl;
+    std::cout << "\n";
 }
 
 void printDijkstraResult(
@@ -127,174 +42,211 @@ void printDijkstraResult(
 )
 {
     for (int destination = 0;
-        destination < static_cast<int>(result.distances.size());
-        ++destination)
+         destination < static_cast<int>(result.distances.size());
+         ++destination)
     {
-        std::cout
-            << "Vertice "
-            << destination
-            << std::endl;
+        std::cout << "\nVertice " << destination << "\n";
 
         if (std::isinf(result.distances[destination]))
         {
-            std::cout
-                << "Distancia: infinito"
-                << std::endl;
-
-            std::cout
-                << "Caminho: nao alcancavel"
-                << std::endl;
+            std::cout << "Distancia: infinito\n";
+            std::cout << "Caminho: nao alcancavel\n";
+            continue;
         }
-        else
+
+        std::cout << "Distancia: "
+                  << result.distances[destination]
+                  << "\n";
+
+        const std::vector<int> path =
+            Dijkstra::buildPath(result, source, destination);
+
+        std::cout << "Caminho: ";
+
+        for (std::size_t i = 0; i < path.size(); ++i)
         {
-            std::cout
-                << "Distancia: "
-                << result.distances[destination]
-                << std::endl;
+            std::cout << path[i];
 
-            std::vector<int> path =
-                Dijkstra::buildPath(
-                    result,
-                    source,
-                    destination
-                );
-
-            std::cout << "Caminho: ";
-
-            for (std::size_t i = 0;
-                i < path.size();
-                ++i)
+            if (i + 1 < path.size())
             {
-                std::cout << path[i];
-
-                if (i + 1 < path.size())
-                {
-                    std::cout << " -> ";
-                }
+                std::cout << " -> ";
             }
-
-            std::cout << std::endl;
         }
 
-        std::cout << std::endl;
+        std::cout << "\n";
     }
-void printVisitOrder(
-    const std::string& label,
-    const std::vector<int>& visitOrder
-)
+}
+
+int readSource(const Graph& graph)
 {
-    std::cout << label << ": ";
+    int source;
 
-    for (int vertex : visitOrder)
-    {
-        std::cout << vertex << " ";
-    }
+    std::cout << "Vertice de origem (0 a "
+              << graph.getVertexCount() - 1
+              << "): ";
+    std::cin >> source;
 
-    std::cout << std::endl;
+    return source;
+}
+
+void showGraphs()
+{
+    std::unique_ptr<Graph> matrixGraph =
+        GraphFileLoader::loadFromFile(
+            "graph.txt",
+            GraphFileLoader::Representation::AdjacencyMatrix
+        );
+
+    std::unique_ptr<Graph> listGraph =
+        GraphFileLoader::loadFromFile(
+            "graph.txt",
+            GraphFileLoader::Representation::AdjacencyList
+        );
+
+    std::cout << "\n===== MATRIZ DE ADJACENCIA =====\n";
+    matrixGraph->printGraph();
+
+    std::cout << "\n===== LISTA DE ADJACENCIA =====\n";
+    listGraph->printGraph();
+}
+
+void runBfs()
+{
+    std::unique_ptr<Graph> matrixGraph =
+        GraphFileLoader::loadFromFile(
+            "graph.txt",
+            GraphFileLoader::Representation::AdjacencyMatrix
+        );
+
+    std::unique_ptr<Graph> listGraph =
+        GraphFileLoader::loadFromFile(
+            "graph.txt",
+            GraphFileLoader::Representation::AdjacencyList
+        );
+
+    const int source = readSource(*matrixGraph);
+
+    const std::vector<int> matrixResult =
+        BreadthFirstSearch::execute(*matrixGraph, source);
+
+    const std::vector<int> listResult =
+        BreadthFirstSearch::execute(*listGraph, source);
+
+    printVisitOrder("BFS - Matriz", matrixResult);
+    printVisitOrder("BFS - Lista", listResult);
+}
+
+void runDfs()
+{
+    std::unique_ptr<Graph> matrixGraph =
+        GraphFileLoader::loadFromFile(
+            "graph.txt",
+            GraphFileLoader::Representation::AdjacencyMatrix
+        );
+
+    std::unique_ptr<Graph> listGraph =
+        GraphFileLoader::loadFromFile(
+            "graph.txt",
+            GraphFileLoader::Representation::AdjacencyList
+        );
+
+    const int source = readSource(*matrixGraph);
+
+    const std::vector<int> matrixResult =
+        DepthFirstSearch::execute(*matrixGraph, source);
+
+    const std::vector<int> listResult =
+        DepthFirstSearch::execute(*listGraph, source);
+
+    printVisitOrder("DFS - Matriz", matrixResult);
+    printVisitOrder("DFS - Lista", listResult);
+}
+
+void runDijkstra()
+{
+    std::unique_ptr<Graph> matrixGraph =
+        GraphFileLoader::loadFromFile(
+            "dijkstra.txt",
+            GraphFileLoader::Representation::AdjacencyMatrix
+        );
+
+    std::unique_ptr<Graph> listGraph =
+        GraphFileLoader::loadFromFile(
+            "dijkstra.txt",
+            GraphFileLoader::Representation::AdjacencyList
+        );
+
+    const int source = readSource(*matrixGraph);
+
+    std::cout << "\n===== DIJKSTRA - MATRIZ =====\n";
+    const DijkstraResult matrixResult =
+        Dijkstra::execute(*matrixGraph, source);
+    printDijkstraResult(matrixResult, source);
+
+    std::cout << "\n===== DIJKSTRA - LISTA =====\n";
+    const DijkstraResult listResult =
+        Dijkstra::execute(*listGraph, source);
+    printDijkstraResult(listResult, source);
+}
+
+void printMenu()
+{
+    std::cout << "\n==============================\n";
+    std::cout << "        PROJETO DE GRAFOS\n";
+    std::cout << "==============================\n";
+    std::cout << "1 - Exibir grafo nas duas representacoes\n";
+    std::cout << "2 - Executar BFS\n";
+    std::cout << "3 - Executar DFS\n";
+    std::cout << "4 - Executar Dijkstra\n";
+    std::cout << "0 - Sair\n";
+    std::cout << "Opcao: ";
 }
 
 int main()
 {
-    try
+    int option = -1;
+
+    while (option != 0)
     {
-        const int source = 0;
+        printMenu();
+        std::cin >> option;
 
-        std::unique_ptr<Graph> matrixGraph =
-            GraphFileLoader::loadFromFile(
-                "dijkstra.txt",
-                GraphFileLoader::Representation::AdjacencyMatrix
-            );
+        try
+        {
+            switch (option)
+            {
+                case 1:
+                    showGraphs();
+                    break;
 
-        std::unique_ptr<Graph> listGraph =
-            GraphFileLoader::loadFromFile(
-                "dijkstra.txt",
-                GraphFileLoader::Representation::AdjacencyList
-            );
+                case 2:
+                    runBfs();
+                    break;
 
-        std::cout
-            << "===== DIJKSTRA - MATRIZ ====="
-            << std::endl
-            << std::endl;
+                case 3:
+                    runDfs();
+                    break;
 
-        DijkstraResult matrixResult =
-            Dijkstra::execute(
-                *matrixGraph,
-                source
-            );
+                case 4:
+                    runDijkstra();
+                    break;
 
-        printDijkstraResult(
-            matrixResult,
-            source
-        );
+                case 0:
+                    std::cout << "\nEncerrando programa.\n";
+                    break;
 
-        std::cout
-            << "===== DIJKSTRA - LISTA ====="
-            << std::endl
-            << std::endl;
-
-        DijkstraResult listResult =
-            Dijkstra::execute(
-                *listGraph,
-                source
-            );
-
-        printDijkstraResult(
-            listResult,
-            source
-        );
-    }
-    catch (const std::exception& exception)
-    {
-        std::cout
-            << "Erro: "
-            << exception.what()
-            << std::endl;
+                default:
+                    std::cout << "\nOpcao invalida.\n";
+                    break;
+            }
+        }
+        catch (const std::exception& exception)
+        {
+            std::cout << "\nErro: "
+                      << exception.what()
+                      << "\n";
+        }
     }
 
     return 0;
-}
-
-/* int main()
-{
-    try
-    {
-        std::unique_ptr<Graph> matrixGraph =
-            GraphFileLoader::loadFromFile(
-                "graph.txt",
-                GraphFileLoader::Representation::AdjacencyMatrix
-            );
-
-        std::unique_ptr<Graph> listGraph =
-            GraphFileLoader::loadFromFile(
-                "graph.txt",
-                GraphFileLoader::Representation::AdjacencyList
-            );
-
-        std::vector<int> matrixBfs =
-            BreadthFirstSearch::execute(*matrixGraph, 0);
-
-        std::vector<int> listBfs =
-            BreadthFirstSearch::execute(*listGraph, 0);
-
-        std::vector<int> matrixDfs =
-            DepthFirstSearch::execute(*matrixGraph, 0);
-
-        std::vector<int> listDfs =
-            DepthFirstSearch::execute(*listGraph, 0);
-
-        printVisitOrder("BFS - Matriz", matrixBfs);
-        printVisitOrder("BFS - Lista", listBfs);
-        printVisitOrder("DFS - Matriz", matrixDfs);
-        printVisitOrder("DFS - Lista", listDfs);
-    }
-    catch (const std::exception& exception)
-    {
-        std::cout
-            << "Erro: "
-            << exception.what()
-            << std::endl;
-    }
-
-    return 0;
-} */
 }
