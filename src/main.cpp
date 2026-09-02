@@ -1,12 +1,14 @@
 #include <iostream>
 #include <memory>
 #include <queue>
+#include <string>
 #include <vector>
 #include <cmath>
 
 #include "io/GraphFileLoader.hpp"
 #include "algorithms/BreadthFirstSearch.hpp"
 #include "algorithms/Dijkstra.hpp"
+#include "algorithms/DepthFirstSearch.hpp"
 
 void printQueue(std::queue<int> queue)
 {
@@ -176,6 +178,19 @@ void printDijkstraResult(
 
         std::cout << std::endl;
     }
+void printVisitOrder(
+    const std::string& label,
+    const std::vector<int>& visitOrder
+)
+{
+    std::cout << label << ": ";
+
+    for (int vertex : visitOrder)
+    {
+        std::cout << vertex << " ";
+    }
+
+    std::cout << std::endl;
 }
 
 int main()
@@ -255,35 +270,22 @@ int main()
                 GraphFileLoader::Representation::AdjacencyList
             );
 
-        // Executa a BFS oficial
         std::vector<int> matrixBfs =
             BreadthFirstSearch::execute(*matrixGraph, 0);
 
         std::vector<int> listBfs =
             BreadthFirstSearch::execute(*listGraph, 0);
 
-        std::cout << "BFS - Matriz: ";
+        std::vector<int> matrixDfs =
+            DepthFirstSearch::execute(*matrixGraph, 0);
 
-        for (int vertex : matrixBfs)
-        {
-            std::cout << vertex << " ";
-        }
+        std::vector<int> listDfs =
+            DepthFirstSearch::execute(*listGraph, 0);
 
-        std::cout << std::endl;
-
-        std::cout << "BFS - Lista: ";
-
-        for (int vertex : listBfs)
-        {
-            std::cout << vertex << " ";
-        }
-
-        std::cout << std::endl;
-
-        // Demonstra a execucao passo a passo
-        std::cout << "\n\nBFS PASSO A PASSO - MATRIZ\n";
-
-        showBfsStepByStep(*matrixGraph, 0);
+        printVisitOrder("BFS - Matriz", matrixBfs);
+        printVisitOrder("BFS - Lista", listBfs);
+        printVisitOrder("DFS - Matriz", matrixDfs);
+        printVisitOrder("DFS - Lista", listDfs);
     }
     catch (const std::exception& exception)
     {
@@ -295,3 +297,4 @@ int main()
 
     return 0;
 } */
+}
