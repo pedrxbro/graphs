@@ -18,6 +18,7 @@ add_executable(graphs
     src/ArbitraryColoring.cpp
     src/WelshPowellColoring.cpp
     src/DSATURColoring.cpp
+    src/BruteForceColoring.cpp
 )
 
 target_include_directories(graphs PRIVATE

@@ -1,3 +1,9 @@
+#pragma once
+
+#include <vector>
+
+#include "graph/Graph.hpp"
+
 class ColoringValidator
 {
 public:
