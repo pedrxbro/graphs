@@ -14,6 +14,8 @@ add_executable(graphs
     src/BreadthFirstSearch.cpp
     src/Dijkstra.cpp
     src/DepthFirstSearch.cpp
+    src/ColoringValidator.cpp
+    src/ArbitraryColoring.cpp
 )
 
 target_include_directories(graphs PRIVATE
