@@ -16,6 +16,7 @@ add_executable(graphs
     src/DepthFirstSearch.cpp
     src/ColoringValidator.cpp
     src/ArbitraryColoring.cpp
+    src/WelshPowellColoring.cpp
 )
 
 target_include_directories(graphs PRIVATE
