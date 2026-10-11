@@ -40,6 +40,20 @@ A Forca Bruta testa quantidades crescentes de cores, iniciando em duas,
 ate encontrar uma coloracao valida. Por possuir crescimento exponencial,
 sua execucao deve ser reservada para grafos pequenos.
 
+### M2.2 - Arvore geradora minima
+
+- Prim;
+- Kruskal;
+- execucao em matriz ou lista de adjacencia;
+- medicao do tempo de execucao;
+- exibicao da soma dos pesos das arestas da arvore;
+- aviso quando o grafo e desconexo (resultado e uma floresta geradora);
+- verificacao de que Prim e Kruskal chegam ao mesmo peso total;
+- comparacao entre matriz e lista no mesmo arquivo.
+
+Os algoritmos exigem grafo **nao direcionado**. Grafos direcionados
+sao rejeitados com uma mensagem de erro.
+
 ## Formato dos arquivos
 
 A primeira linha do arquivo possui:
@@ -112,6 +126,9 @@ D = 0
 P = 0
 ```
 
+Os grafos da M2.2 ficam em `mst/` (`small`, `medium` e `large`) e seus
+pesos esperados estao em `mst/README.md`.
+
 Mais detalhes sobre os grafos de teste e seus numeros cromaticos
 esperados estao disponiveis em `coloring/README.md`.
 
@@ -146,6 +163,7 @@ Ao executar o programa, o menu principal permite:
 3 - Executar DFS
 4 - Executar Dijkstra
 5 - Coloracao
+6 - Arvore geradora minima
 0 - Sair
 ```
 
@@ -256,6 +274,33 @@ ao numero cromatico encontrado pelo algoritmo.
 
 Devido ao crescimento exponencial da quantidade de combinacoes, esse
 algoritmo deve ser utilizado apenas em grafos pequenos.
+
+## Algoritmos de arvore geradora minima
+
+### Prim
+
+Parte de um vertice e, a cada passo, adiciona a aresta mais barata que
+liga a arvore a um vertice ainda fora dela. Usa uma fila de prioridade
+(`std::set`) com chave = menor peso conhecido ate a arvore.
+Complexidade: O(E log V).
+
+### Kruskal
+
+Ordena todas as arestas por peso e adiciona cada uma se ela nao formar
+ciclo. A deteccao de ciclo usa conjuntos disjuntos (union-find) com
+compressao de caminho e uniao por rank.
+Complexidade: O(E log E).
+
+### Observacoes
+
+- O tempo medido considera somente o algoritmo (no Kruskal inclui
+  coletar e ordenar as arestas).
+- Em grafos desconexos o Prim reinicia em cada componente, entao os
+  dois algoritmos produzem a mesma floresta geradora.
+- As arestas escolhidas podem diferir em caso de empate de pesos, mas a
+  soma e sempre a mesma.
+- O Prim consulta `getEdgeWeight` para cada vizinho. Na lista de
+  adjacencia essa consulta e O(grau), o que pesa em grafos densos.
 
 ## Representacoes
 

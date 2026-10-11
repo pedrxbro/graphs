@@ -1,6 +1,7 @@
 #include <cmath>
 #include <iostream>
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -12,6 +13,10 @@
 #include "algorithms/coloring/ColoringBenchmark.hpp"
 #include "algorithms/coloring/DSATURColoring.hpp"
 #include "algorithms/coloring/WelshPowellColoring.hpp"
+#include "algorithms/mst/KruskalMst.hpp"
+#include "algorithms/mst/MstBenchmark.hpp"
+#include "algorithms/mst/MstValidator.hpp"
+#include "algorithms/mst/PrimMst.hpp"
 #include "io/GraphFileLoader.hpp"
 
 void printVisitOrder(
@@ -530,6 +535,215 @@ void runColoring()
     }
 }
 
+// ===== ARVORE GERADORA MINIMA =====
+
+MstBenchmarkResult runMstAlgorithm(
+    const Graph& graph,
+    const std::string& representationName,
+    const std::string& algorithmName,
+    MstBenchmark::Algorithm algorithm
+)
+{
+    const MstBenchmarkResult benchmark =
+        MstBenchmark::measure(
+            graph,
+            algorithm
+        );
+
+    MstBenchmark::print(
+        std::cout,
+        algorithmName,
+        representationName,
+        graph,
+        benchmark
+    );
+
+    return benchmark;
+}
+
+// Sanity check: both algorithms must reach the same total weight.
+// The chosen edges may differ on ties, the sum may not.
+void printMstWeightCheck(
+    const MstBenchmarkResult& prim,
+    const MstBenchmarkResult& kruskal
+)
+{
+    const double difference =
+        std::fabs(
+            prim.mst.totalWeight -
+            kruskal.mst.totalWeight
+        );
+
+    std::cout
+        << "\nVerificacao: "
+        << (difference < 1e-3
+            ? "Prim e Kruskal chegaram ao mesmo peso total.\n"
+            : "ATENCAO - pesos totais diferentes!\n");
+}
+
+void runAllMst(
+    const Graph& graph,
+    const std::string& representationName
+)
+{
+    const MstBenchmarkResult prim =
+        runMstAlgorithm(
+            graph,
+            representationName,
+            "Prim",
+            &PrimMst::execute
+        );
+
+    const MstBenchmarkResult kruskal =
+        runMstAlgorithm(
+            graph,
+            representationName,
+            "Kruskal",
+            &KruskalMst::execute
+        );
+
+    printMstWeightCheck(prim, kruskal);
+}
+
+// Runs Prim and Kruskal on matrix AND list, same file.
+void runMstRepresentationComparison(
+    const std::string& filePath
+)
+{
+    std::unique_ptr<Graph> matrixGraph =
+        GraphFileLoader::loadFromFile(
+            filePath,
+            GraphFileLoader::Representation::
+            AdjacencyMatrix
+        );
+
+    std::unique_ptr<Graph> listGraph =
+        GraphFileLoader::loadFromFile(
+            filePath,
+            GraphFileLoader::Representation::
+            AdjacencyList
+        );
+
+    runAllMst(*matrixGraph, "Matriz de adjacencia");
+    runAllMst(*listGraph, "Lista de adjacencia");
+}
+
+void printMstMenu()
+{
+    std::cout
+        << "\n==============================\n";
+    std::cout
+        << "   ARVORE GERADORA MINIMA\n";
+    std::cout
+        << "==============================\n";
+    std::cout
+        << "1 - Prim\n";
+    std::cout
+        << "2 - Kruskal\n";
+    std::cout
+        << "3 - Executar os dois e comparar\n";
+    std::cout
+        << "4 - Comparar matriz x lista "
+        << "(Prim e Kruskal)\n";
+    std::cout
+        << "0 - Voltar\n";
+    std::cout
+        << "Opcao: ";
+}
+
+void runMst()
+{
+    GraphFileLoader::Representation representation =
+        GraphFileLoader::Representation::
+        AdjacencyMatrix;
+
+    std::string representationName;
+
+    if (!readColoringRepresentation(
+        representation,
+        representationName
+    ))
+    {
+        return;
+    }
+
+    std::string filePath;
+
+    std::cout
+        << "\nCaminho do arquivo do grafo\n";
+    std::cout
+        << "(exemplo: "
+        << "mst/small/clrs-9.txt): ";
+
+    std::cin >> filePath;
+
+    // Load once, before any timing.
+    std::unique_ptr<Graph> graph =
+        GraphFileLoader::loadFromFile(
+            filePath,
+            representation
+        );
+
+    if (!MstValidator::isUndirected(*graph))
+    {
+        throw std::runtime_error(
+            "Arvore geradora minima exige "
+            "grafo nao direcionado."
+        );
+    }
+
+    int option = -1;
+
+    while (option != 0)
+    {
+        printMstMenu();
+
+        std::cin >> option;
+
+        switch (option)
+        {
+        case 1:
+            runMstAlgorithm(
+                *graph,
+                representationName,
+                "Prim",
+                &PrimMst::execute
+            );
+            break;
+
+        case 2:
+            runMstAlgorithm(
+                *graph,
+                representationName,
+                "Kruskal",
+                &KruskalMst::execute
+            );
+            break;
+
+        case 3:
+            runAllMst(
+                *graph,
+                representationName
+            );
+            break;
+
+        case 4:
+            runMstRepresentationComparison(filePath);
+            break;
+
+        case 0:
+            std::cout
+                << "\nVoltando ao menu principal.\n";
+            break;
+
+        default:
+            std::cout
+                << "\nOpcao invalida.\n";
+            break;
+        }
+    }
+}
+
 void printMenu()
 {
     std::cout
@@ -548,6 +762,8 @@ void printMenu()
         << "4 - Executar Dijkstra\n";
     std::cout
         << "5 - Coloracao\n";
+    std::cout
+        << "6 - Arvore geradora minima\n";
     std::cout
         << "0 - Sair\n";
     std::cout
@@ -586,6 +802,10 @@ int main()
 
             case 5:
                 runColoring();
+                break;
+
+            case 6:
+                runMst();
                 break;
 
             case 0:

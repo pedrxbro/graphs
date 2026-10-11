@@ -20,6 +20,10 @@ add_executable(graphs
     src/DSATURColoring.cpp
     src/BruteForceColoring.cpp
     src/ColoringBenchmark.cpp
+    src/MstValidator.cpp
+    src/PrimMst.cpp
+    src/KruskalMst.cpp
+    src/MstBenchmark.cpp
 )
 
 target_include_directories(graphs PRIVATE
