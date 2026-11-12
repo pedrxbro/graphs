@@ -16,6 +16,16 @@ public:
 
     virtual ~Graph() = default;
 
+    bool isDirected() const noexcept
+    {
+        return directed_;
+    }
+
+    bool isWeighted() const noexcept
+    {
+        return weighted_;
+    }
+
     virtual bool addVertex() = 0;
 
     virtual bool removeVertex(int index) = 0;
