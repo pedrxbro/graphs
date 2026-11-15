@@ -24,8 +24,52 @@ add_executable(graphs
     src/PrimMst.cpp
     src/KruskalMst.cpp
     src/MstBenchmark.cpp
+    src/FordFulkerson.cpp
+    src/LocalSearchFlow.cpp
 )
 
 target_include_directories(graphs PRIVATE
     ${PROJECT_SOURCE_DIR}/include
 )
+
+include(CTest)
+
+if(BUILD_TESTING)
+    add_executable(graphs_flow_tests
+        tests/FordFulkersonTests.cpp
+        src/AdjacencyMatrixGraph.cpp
+        src/AdjacencyListGraph.cpp
+        src/GraphFileLoader.cpp
+        src/DepthFirstSearch.cpp
+        src/FordFulkerson.cpp
+        src/LocalSearchFlow.cpp
+    )
+
+    target_include_directories(graphs_flow_tests PRIVATE
+        ${PROJECT_SOURCE_DIR}/include
+    )
+
+    add_test(
+        NAME ford_fulkerson_m3
+        COMMAND graphs_flow_tests
+            "${PROJECT_SOURCE_DIR}/tests/data/flow_clrs_6.txt"
+    )
+
+    add_executable(graphs_local_search_tests
+        tests/LocalSearchFlowTests.cpp
+        src/AdjacencyMatrixGraph.cpp
+        src/AdjacencyListGraph.cpp
+        src/DepthFirstSearch.cpp
+        src/FordFulkerson.cpp
+        src/LocalSearchFlow.cpp
+    )
+
+    target_include_directories(graphs_local_search_tests PRIVATE
+        ${PROJECT_SOURCE_DIR}/include
+    )
+
+    add_test(
+        NAME local_search_m3
+        COMMAND graphs_local_search_tests
+    )
+endif()

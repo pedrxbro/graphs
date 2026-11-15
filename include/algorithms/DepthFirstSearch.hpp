@@ -11,4 +11,10 @@ public:
         const Graph& graph,
         int source
     );
+
+    static std::vector<int> findPath(
+        const Graph& graph,
+        int source,
+        int destination
+    );
 };
