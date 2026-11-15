@@ -1,4 +1,3 @@
-
 cmake_minimum_required(VERSION 3.16)
 
 project(Graphs VERSION 1.0 LANGUAGES CXX)
@@ -26,6 +25,7 @@ add_executable(graphs
     src/KruskalMst.cpp
     src/MstBenchmark.cpp
     src/FordFulkerson.cpp
+    src/LocalSearchFlow.cpp
 )
 
 target_include_directories(graphs PRIVATE
@@ -42,6 +42,7 @@ if(BUILD_TESTING)
         src/GraphFileLoader.cpp
         src/DepthFirstSearch.cpp
         src/FordFulkerson.cpp
+        src/LocalSearchFlow.cpp
     )
 
     target_include_directories(graphs_flow_tests PRIVATE
@@ -52,5 +53,23 @@ if(BUILD_TESTING)
         NAME ford_fulkerson_m3
         COMMAND graphs_flow_tests
             "${PROJECT_SOURCE_DIR}/tests/data/flow_clrs_6.txt"
+    )
+
+    add_executable(graphs_local_search_tests
+        tests/LocalSearchFlowTests.cpp
+        src/AdjacencyMatrixGraph.cpp
+        src/AdjacencyListGraph.cpp
+        src/DepthFirstSearch.cpp
+        src/FordFulkerson.cpp
+        src/LocalSearchFlow.cpp
+    )
+
+    target_include_directories(graphs_local_search_tests PRIVATE
+        ${PROJECT_SOURCE_DIR}/include
+    )
+
+    add_test(
+        NAME local_search_m3
+        COMMAND graphs_local_search_tests
     )
 endif()
