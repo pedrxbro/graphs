@@ -54,6 +54,22 @@ sua execucao deve ser reservada para grafos pequenos.
 Os algoritmos exigem grafo **nao direcionado**. Grafos direcionados
 sao rejeitados com uma mensagem de erro.
 
+### M3.1 - Fluxo maximo
+
+- Ford-Fulkerson com busca em profundidade por caminhos aumentantes;
+- construcao e atualizacao da rede residual;
+- suporte a capacidades fracionarias e arcos antiparalelos;
+- busca local por melhor melhora, invertendo uma aresta por vez;
+- execucao em matriz ou lista de adjacencia;
+- validacao da fonte, do destino e das capacidades;
+- testes automatizados para os dois algoritmos e representacoes.
+
+Os algoritmos exigem um grafo **direcionado e ponderado**, no qual o
+peso de cada aresta representa sua capacidade e deve ser finito e nao
+negativo. A busca local preserva as capacidades, avalia todas as
+inversoes de uma unica aresta e aplica a que produz o maior aumento de
+fluxo. O processo termina quando nenhuma inversao melhora a solucao.
+
 ## Formato dos arquivos
 
 A primeira linha do arquivo possui:
@@ -129,6 +145,12 @@ P = 0
 Os grafos da M2.2 ficam em `mst/` (`small`, `medium` e `large`) e seus
 pesos esperados estao em `mst/README.md`.
 
+O exemplo classico de rede de fluxo da M3.1 fica em:
+
+```text
+tests/data/flow_clrs_6.txt
+```
+
 Mais detalhes sobre os grafos de teste e seus numeros cromaticos
 esperados estao disponiveis em `coloring/README.md`.
 
@@ -139,6 +161,14 @@ A partir da raiz do projeto, execute:
 ```bash
 cmake -S . -B build
 cmake --build build --config Release
+```
+
+Para compilar e executar os testes automatizados da M3.1:
+
+```bash
+cmake -S . -B build -DBUILD_TESTING=ON
+cmake --build build --config Release
+ctest --test-dir build -C Release --output-on-failure
 ```
 
 No Windows com Visual Studio, o executavel normalmente sera gerado em:
@@ -301,6 +331,23 @@ Complexidade: O(E log E).
   soma e sempre a mesma.
 - O Prim consulta `getEdgeWeight` para cada vizinho. Na lista de
   adjacencia essa consulta e O(grau), o que pesa em grafos densos.
+
+## Algoritmos de fluxo maximo
+
+### Ford-Fulkerson
+
+Cria uma rede residual independente do grafo original e procura
+caminhos aumentantes entre a fonte e o destino por busca em
+profundidade. Em cada caminho, adiciona ao fluxo a menor capacidade
+residual encontrada e atualiza os arcos diretos e reversos.
+
+### Busca local
+
+Parte do fluxo maximo da rede original e considera como vizinhanca as
+solucoes obtidas pela inversao de exatamente uma aresta, sem alterar
+sua capacidade. A cada iteracao aplica a inversao que oferece a maior
+melhoria estrita. O resultado informa o fluxo inicial, o fluxo final e
+a quantidade de inversoes aceitas.
 
 ## Representacoes
 
